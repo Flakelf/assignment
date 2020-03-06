@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-function App() {
+import { getPosts, getUsers } from "./helpers/requests";
+
+import { Main, Edit, Create } from "./screens";
+
+import { Layout } from "./components";
+
+const App = () => {
+  const [users, setUsers] = useState();
+  const [posts, setPosts] = useState();
+
+  useEffect(() => {
+    getPosts().then(({ data }) => setPosts(data));
+    getUsers().then(({ data }) => setUsers(data));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Router>
+        <Layout />
+
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={props => <Main users={users} posts={posts} {...props} />}
+          />
+          <Route
+            exact
+            path="/edit/:id"
+            render={props => <Edit users={users} posts={posts} {...props} />}
+          />
+
+          <Route
+            exact
+            path="/create"
+            render={props => <Create users={users} {...props} />}
+          />
+        </Switch>
+      </Router>
+    </React.Fragment>
   );
-}
+};
 
 export default App;
