@@ -111,12 +111,9 @@ const PostsTable = ({ posts, users, history }) => {
     },
     []
   );
-  const handleFilterChange = useCallback(
-    () => value => {
-      setState(prevState => ({ ...prevState, searchQuery: value }));
-    },
-    []
-  );
+  const handleFilterChange = useCallback(value => {
+    setState(prevState => ({ ...prevState, searchQuery: value }));
+  }, []);
 
   const renderTitleHeaderCell = useMemo(
     () => () => (
